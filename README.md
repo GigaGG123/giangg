@@ -1,0 +1,41 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export default function ChatDaLive() {
+  const [mensagens, setMensagens] = useState([]);
+  const [novaMensagem, setNovaMensagem] = useState("");
+
+  const enviarMensagem = () => {
+    if (novaMensagem.trim() === "") return;
+    setMensagens([...mensagens, { texto: novaMensagem, hora: new Date().toLocaleTimeString() }]);
+    setNovaMensagem("");
+  };
+
+  return (
+    <div className="max-w-lg mx-auto p-4">
+      <h1 className="text-2xl font-bold text-center mb-4">💬 Chat da Live</h1>
+      <Card className="h-96 overflow-y-auto p-2 bg-white rounded-2xl shadow-lg">
+        <CardContent>
+          {mensagens.map((msg, index) => (
+            <div key={index} className="mb-2">
+              <span className="font-semibold">Anónimo:</span> {msg.texto}
+              <span className="text-xs text-gray-400 ml-2">{msg.hora}</span>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+      <div className="flex mt-4 gap-2">
+        <Input
+          value={novaMensagem}
+          onChange={(e) => setNovaMensagem(e.target.value)}
+          placeholder="Escreve a tua mensagem..."
+          className="flex-1"
+          onKeyDown={(e) => e.key === 'Enter' && enviarMensagem()}
+        />
+        <Button onClick={enviarMensagem}>Enviar</Button>
+      </div>
+    </div>
+  );
+}
